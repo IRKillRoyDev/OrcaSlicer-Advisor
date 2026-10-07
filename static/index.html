@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>OrcaSlicer Advisor</title>
+  <link rel="stylesheet" href="/static/style.css?v=13">
+</head>
+<body>
+  <header class="top">
+    <div>
+      <p class="eyebrow">OrcaSlicer</p>
+      <h1>Settings advisor</h1>
+    </div>
+    <p class="lede">Copy the active profile, paste the review, then save the changes as a new preset.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button type="button" role="tab" data-tab="review" aria-selected="true" aria-controls="panel-review">Review</button>
+    <button type="button" role="tab" data-tab="presets" aria-selected="false" aria-controls="panel-presets">User presets</button>
+  </nav>
+
+  <main>
+    <div id="panel-review" role="tabpanel">
+    <section class="panel">
+      <div class="panel-head">
+        <h2>1. Current profile</h2>
+        <button id="reload" type="button" class="ghost">Reload from OrcaSlicer</button>
+      </div>
+      <label class="field">
+        Printer setup
+        <select id="setup"></select>
+      </label>
+      <p id="profile-meta" class="meta"></p>
+      <div id="groups"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>2. Filament</h2>
+      </div>
+      <p class="muted">Brand, type, and diameter come from the filament profiles installed in OrcaSlicer. Color is the spool color. All four are included in the JSON.</p>
+      <div class="filament-grid">
+        <label class="field">Brand<select id="filament-brand"></select></label>
+        <label class="field">Type<select id="filament-type"></select></label>
+        <label class="field">Color<select id="filament-color"></select></label>
+        <label class="field">Diameter, mm<select id="filament-diameter"></select></label>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>3. JSON for Grok</h2>
+        <button id="copy" type="button">Copy JSON</button>
+        <button id="send-grok" type="button" class="primary">Send to Grok</button>
+      </div>
+      <label class="field">
+        Part notes, included in the JSON
+        <textarea id="notes" rows="3" placeholder="Example: thin wall vent clip, needs to stay rigid in a hot car, cosmetic face is the outside."></textarea>
+      </label>
+      <div class="file-row">
+        <button id="choose-stl" type="button">Load STL</button>
+        <span id="stl-status" class="muted">No STL loaded. Load one to name the preset and put the part size in the JSON.</span>
+        <button id="clear-stl" type="button" class="ghost" hidden>Remove</button>
+        <input id="file" type="file" accept=".stl" hidden>
+      </div>
+      <textarea id="prompt" rows="16" spellcheck="false"></textarea>
+      <p id="grok-status" class="muted">Send to Grok uses the Safari window already in front. It does not open another Safari. The first time, open Develop → Developer Settings and turn on “Allow JavaScript from Apple Events.” If you are signed in, the prompt runs in a background tab. If you are not, that tab comes forward for the login. This app does not save the password.</p>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>4. Review</h2>
+      </div>
+      <label class="field">
+        Paste the JSON response
+        <textarea id="feedback" rows="8" spellcheck="false" placeholder='{"summary":"...","changes":[{"key":"wall_loops","value":"4","reason":"..."}]}'></textarea>
+      </label>
+      <label class="field">
+        Preset name
+        <input id="preset-name" type="text" placeholder="End Cap" autocomplete="off">
+      </label>
+      <p id="preset-preview" class="muted">Name it after the part. It is saved as the current profile, then this name.</p>
+      <div class="actions">
+        <button id="review" type="button">Preview changes</button>
+        <button id="apply" type="button" class="primary" disabled>Save as new presets</button>
+      </div>
+      <p id="summary" class="summary" hidden></p>
+      <div id="diff"></div>
+      <p id="result" class="result" hidden></p>
+    </section>
+    </div>
+
+    <div id="panel-presets" role="tabpanel" hidden>
+    <section class="panel">
+      <div class="panel-head">
+        <h2>User presets</h2>
+      </div>
+      <p class="muted">Process and filament presets you saved. Printer profiles and Creality’s stock presets are not listed. Delete removes the file. Quit OrcaSlicer and reopen it to drop the preset from its menu.</p>
+      <p id="preset-message" class="result" hidden></p>
+      <div id="user-presets"></div>
+    </section>
+    </div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="/static/app.js?v=13"></script>
+</body>
+</html>
